@@ -26,7 +26,8 @@ public class PlayerMovement : MonoBehaviour
     //[SerializeField] bool grounded;
     public Collider triggerCollider;
 
-    public Slider wingMeter;
+
+    public Slider flapMeter;
     //----------Variables----------\\
 
     // Start is called before the first frame update
@@ -40,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //Note: I'm not using delta time because I want the movement to be consistant, and not change depending on frame rate (i think)
         //----------Movement----------\\
-        if (wingMeter.value != 0)
+        if (flapMeter.value != 0)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -48,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
                 //rb.AddForce(new Vector3(0f, 5f, 0f), ForceMode.Impulse);
                 rb.AddRelativeForce(new Vector3(0f, flapStrength, 0f), ForceMode.Impulse);
                 rb.AddRelativeTorque(new Vector3(0f, 0f, -rotateStrength), ForceMode.Impulse);
-                wingMeter.value -= 0.1f;
+                flapMeter.value -= 0.1f;
 
 
             }
@@ -57,13 +58,16 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Left Down");
                 rb.AddRelativeForce(new Vector3(0f, flapStrength, 0f), ForceMode.Impulse);
                 rb.AddRelativeTorque(new Vector3(0f, 0f, rotateStrength), ForceMode.Impulse);
-                wingMeter.value -= 0.1f;
+
+                //update the flap meter
+                flapMeter.value -= 0.1f;
             }
         }
 
-        
-
-        //Debug.Log(rb.rotation.eulerAngles.z);
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    rb.velocity = new Vector3(30f, 0f, 0f);
+        //}
 
 
         // Code that checks the speed of the player, limiting their speed and re-rights the player if they are still for too long
@@ -81,13 +85,13 @@ public class PlayerMovement : MonoBehaviour
         else if (rb.velocity.magnitude > maxSpeed)
         {
             rb.velocity = rb.velocity.normalized * maxSpeed;
-            //Debug.Log("AHHHHHH");
+            Debug.Log("AHHHHHH");
         }
         if (stationaryTimer < 0f)
         {
             rb.gameObject.transform.eulerAngles = Vector3.zero;
             rb.velocity = Vector3.zero;
-            wingMeter.value += 1f * Time.deltaTime;
+            flapMeter.value += 1f * Time.deltaTime;
         }
 
 
@@ -98,8 +102,23 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             //grounded = true;
-            Debug.Log("im tired I stay on ground");
+            //Debug.Log("im tired I stay on ground");
+            rb.drag = 0.35f;
         }
+
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ceiling"))
+        {
+            //grounded = true;
+            Debug.Log("ow my head");
+            flapMeter.value = 0;
+        }
+
+
     }
     private void OnTriggerExit(Collider other)
     {
@@ -107,6 +126,8 @@ public class PlayerMovement : MonoBehaviour
         {
             //grounded = false;
             Debug.Log("I am off the ground");
+            rb.drag = 0f;
         }
     }
+    
 }
