@@ -5,7 +5,7 @@ using UnityEngine;
 public class WallDetection : MonoBehaviour
 {
     public PlayerMovement player;
-    [SerializeField] Vector3 bounce;
+    public Vector3 playerBounceVelocity;
     
     // Start is called before the first frame update
     void Start()
@@ -21,6 +21,14 @@ public class WallDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
+        // I have moved this code outsid eth if statement so now the player can bounce on the ground !!! big pog
+        playerBounceVelocity = player.rb.velocity;
+
+        Debug.Log("THERES A WALL BRO");
+
+
+
         if (other.gameObject.CompareTag("Wall"))
         {
 
@@ -30,15 +38,20 @@ public class WallDetection : MonoBehaviour
             //I have tried changing it to "OnCollision: but for some reason nothing was being picked up.
 
 
-            Vector3 collisionPoint = other.ClosestPoint(player.rb.transform.position);
+            //Vector3 collisionPoint = other.ClosestPoint(player.rb.transform.position);
             //Debug.Log("collisionPoint= " + collisionPoint);
 
-            Vector3 collisionNormal = player.rb.transform.position - collisionPoint;
+            //Vector3 collisionNormal = player.rb.transform.position - collisionPoint;
             //Debug.Log("collisionNormal= " + collisionNormal);
             //Debug.Log(Vector3.Reflect(player.rb.velocity, collisionNormal));
 
-            player.rb.velocity = Vector3.Reflect(player.rb.velocity, collisionNormal);
+            //player.rb.velocity = Vector3.Reflect(player.rb.velocity, collisionNormal);
 
+
+            //okay, what im doing now is im making a large detection area that will start tracking the player velocity very far from when they hit the wall,
+            //this means that the player should never just stop against a wall.
+
+            
 
 
             //player.flapMeter.value = 0f;
@@ -47,14 +60,10 @@ public class WallDetection : MonoBehaviour
 
             //Debug.Log("bro thats a frogging wall slow down");
 
-
-
-
-
-
-
         }
     }
+
+    //--------------------------------------------------------------------------THIS DIDNT WORK---------------------------------
     //void OnCollisionEnter(Collision collision)
     //{
     //    //player.rb.AddForce(player.rb.velocity, collision.contacts[0].normal);
