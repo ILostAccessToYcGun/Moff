@@ -1118,10 +1118,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   whatTheMothDoin: 0
+  whichWallIsTheMothCliningTo: 0
   rb: {fileID: 1097459007}
   flapStrength: 5
   rotateStrength: 0.15
   maxSpeed: 30
+  wallClingTollerance: 7.5
   stationaryTimer: 3
   wallDetectionHitBox: {fileID: 87758415}
   flapMeter: {fileID: 1746959217}
