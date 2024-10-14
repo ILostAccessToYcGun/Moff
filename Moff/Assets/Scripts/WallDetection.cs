@@ -7,27 +7,11 @@ public class WallDetection : MonoBehaviour
     public PlayerMovement player;
     public Vector3 playerBounceVelocity;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         
         // I have moved this code outsid eth if statement so now the player can bounce on the ground !!! big pog
         playerBounceVelocity = player.rb.velocity;
-
-        Debug.Log("THERES A WALL BRO");
-
-
 
         if (other.gameObject.CompareTag("Wall"))
         {
